@@ -8,7 +8,7 @@ export const findAllUsers = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       status: "fail",
-      message: "Things went south! 😵"
+      message: "Things went south! 😵",
     });
   }
 };
@@ -22,7 +22,7 @@ export const createUsers = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       status: "fail",
-      message: "Things went south! 😵"
+      message: "Things went south! 😵",
     });
   }
 };
@@ -32,38 +32,65 @@ export const findUser = async (req, res) => {
 
     const user = await UserService.findUser(id);
 
-    if (!user){
+    if (!user) {
       return res.status(404).json({
-        status: 'error',
-        message: 'user not found'
-      })
+        status: "error",
+        message: "user not found",
+      });
     }
 
-    return res.status(200).json(user)
-
+    return res.status(200).json(user);
   } catch (error) {
     return res.status(500).json({
       status: "fail",
-      message: "Things went south! 😵"
+      message: "Things went south! 😵",
     });
   }
 };
 export const updateUser = async (req, res) => {
   try {
-    
+    const { id } = req.params;
+    const { name, email } = req.body;
+
+    const user = await UserService.findUser(id);
+
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "user not found",
+      });
+    }
+
+    const userUpdated = await UserService.update(user, { name, email });
+
+    return res.status(200).json(userUpdated);
   } catch (error) {
     return res.status(500).json({
       status: "fail",
-      message: "Things went south! 😵"
+      message: "Things went south! 😵",
     });
   }
 };
 export const deleteUser = async (req, res) => {
   try {
+    const { id } = req.params;
+
+    const user = await UserService.findUser(id);
+
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "user not found",
+      });
+    }
+
+    await UserService.delete(user);
+
+    return res.status(204).json(null);
   } catch (error) {
     return res.status(500).json({
       status: "fail",
-      message: "Things went south! 😵"
+      message: "Things went south! 😵",
     });
   }
 };

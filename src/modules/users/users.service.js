@@ -10,9 +10,9 @@ export class UserService {
   }
 
   static async findUser(id) {
-    return await User.findUser({
+    return await User.findOne({
       where: {
-        id,
+        id: id,
         status: "available",
       },
     });
